@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Opening Nuetech App...</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f0f4ff;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .card {
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 40px 32px;
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    }
+
+    .logo {
+      width: 72px;
+      height: 72px;
+      background: linear-gradient(135deg, #3B82F6, #60A5FA);
+      border-radius: 20px;
+      margin: 0 auto 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo svg { width: 40px; height: 40px; fill: white; }
+
+    h1 {
+      font-size: 22px;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: #64748b;
+      line-height: 1.6;
+      margin-bottom: 32px;
+    }
+
+    .device-info {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 28px;
+      text-align: left;
+    }
+
+    .device-info-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 4px 0;
+    }
+
+    .device-info-row:not(:last-child) {
+      border-bottom: 1px solid #f1f5f9;
+      margin-bottom: 6px;
+      padding-bottom: 10px;
+    }
+
+    .info-label {
+      font-size: 12px;
+      color: #94a3b8;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .info-value {
+      font-size: 14px;
+      color: #1e293b;
+      font-weight: 600;
+      font-family: monospace;
+    }
+
+    .spinner-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    .spinner {
+      width: 36px;
+      height: 36px;
+      border: 3px solid #e2e8f0;
+      border-top-color: #3B82F6;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .status-text {
+      font-size: 14px;
+      color: #475569;
+      font-weight: 500;
+    }
+
+    .progress-bar-wrap {
+      background: #e2e8f0;
+      border-radius: 99px;
+      height: 4px;
+      overflow: hidden;
+      margin-bottom: 28px;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: #3B82F6;
+      border-radius: 99px;
+      width: 0%;
+      transition: width 0.1s linear;
+    }
+
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 14px;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      text-decoration: none;
+      margin-bottom: 10px;
+    }
+
+    .btn-primary {
+      background: #3B82F6;
+      color: white;
+    }
+
+    .btn-secondary {
+      background: #f1f5f9;
+      color: #475569;
+      font-size: 13px;
+      padding: 10px;
+    }
+
+    .btn:hover { opacity: 0.9; }
+
+    .footer {
+      margin-top: 24px;
+      font-size: 12px;
+      color: #94a3b8;
+    }
+
+    /* Success state */
+    .state-success .spinner-wrap { display: none; }
+    .state-success .progress-bar-wrap { display: none; }
+
+    /* Hidden by default */
+    #actions { display: none; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="logo">
+      <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10
+        10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4
+        0h-2V8h2v8z"/></svg>
+    </div>
+
+    <h1>Nuetech Device Setup</h1>
+    <p class="subtitle" id="subtitle">
+      Connecting you to your solar water heater controller...
+    </p>
+
+    <!-- Device info -->
+    <div class="device-info" id="deviceInfo">
+      <div class="device-info-row">
+        <span class="info-label">Product ID</span>
+        <span class="info-value" id="pidDisplay">—</span>
+      </div>
+      <div class="device-info-row">
+        <span class="info-label">Serial No.</span>
+        <span class="info-value" id="snDisplay">—</span>
+      </div>
+    </div>
+
+    <!-- Spinner + progress -->
+    <div class="spinner-wrap">
+      <div class="spinner"></div>
+      <span class="status-text" id="statusText">Opening app...</span>
+    </div>
+
+    <div class="progress-bar-wrap">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- Action buttons (shown after timeout) -->
+    <div id="actions">
+      <a id="playStoreBtn" href="#" class="btn btn-primary">
+        Get Nuetech App on Play Store
+      </a>
+      <button class="btn btn-secondary" onclick="retryApp()">
+        Already installed? Try opening again
+      </button>
+    </div>
+
+    <div class="footer">Nuetech IoT &mdash; Solar Water Heater Controller</div>
+  </div>
+
+  <script>
+    const PLAY_STORE_URL =
+      'https://play.google.com/store/apps/details?id=de.kai_morich.serial_bluetooth_terminal&hl=en_IN';
+    const FALLBACK_DELAY_MS = 2500;
+    const PROGRESS_INTERVAL_MS = 50;
+
+    // ── Parse query params ────────────────────────────────────────────────
+    const params  = new URLSearchParams(window.location.search);
+    const pid     = params.get('pid') || '';
+    const sn      = params.get('sn')  || '';
+
+    document.getElementById('pidDisplay').textContent = pid || '—';
+    document.getElementById('snDisplay').textContent  = sn  || '—';
+    document.getElementById('playStoreBtn').href      = PLAY_STORE_URL;
+
+    // ── Build deep link ───────────────────────────────────────────────────
+    const deepLink = 'nuetech://device?pid=' + encodeURIComponent(pid)
+                   + '&sn=' + encodeURIComponent(sn);
+
+    // ── Attempt to open app ───────────────────────────────────────────────
+    function tryOpenApp() {
+      document.getElementById('statusText').textContent = 'Opening app...';
+      window.location.href = deepLink;
+    }
+
+    function retryApp() {
+      tryOpenApp();
+    }
+
+    // ── Progress bar animation ────────────────────────────────────────────
+    let elapsed = 0;
+    const progressBar = document.getElementById('progressBar');
+
+    const progressTimer = setInterval(() => {
+      elapsed += PROGRESS_INTERVAL_MS;
+      const pct = Math.min((elapsed / FALLBACK_DELAY_MS) * 100, 100);
+      progressBar.style.width = pct + '%';
+      if (elapsed >= FALLBACK_DELAY_MS) clearInterval(progressTimer);
+    }, PROGRESS_INTERVAL_MS);
+
+    // ── Fallback: redirect to Play Store after delay ──────────────────────
+    let appOpened = false;
+
+    // If page loses visibility, app likely opened
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) appOpened = true;
+    });
+
+    window.addEventListener('blur', () => { appOpened = true; });
+
+    setTimeout(() => {
+      if (!appOpened) {
+        // App did not open — show fallback UI
+        document.getElementById('statusText').textContent =
+          'App not found. Redirecting to Play Store...';
+        document.getElementById('subtitle').textContent =
+          'Install the Nuetech app to control your solar water heater.';
+
+        document.querySelector('.spinner-wrap').style.display = 'none';
+        document.querySelector('.progress-bar-wrap').style.display = 'none';
+        document.getElementById('actions').style.display = 'block';
+
+        // Auto-redirect to Play Store after 1 more second
+        setTimeout(() => {
+          if (!appOpened) window.location.href = PLAY_STORE_URL;
+        }, 1000);
+      }
+    }, FALLBACK_DELAY_MS);
+
+    // ── Kick off immediately ──────────────────────────────────────────────
+    tryOpenApp();
+  </script>
+</body>
+</html>
