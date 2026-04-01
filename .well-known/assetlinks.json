@@ -1,11 +1,13 @@
 [
   {
-    "relation": ["delegate_permission/common.handle_all_urls"],
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
     "target": {
       "namespace": "android_app",
       "package_name": "com.nuetech.testapp",
       "sha256_cert_fingerprints": [
-        "YOUR_SHA256_FINGERPRINT_HERE"
+        "D5:45:07:FE:5E:44:63:CE:28:2B:09:E9:27:03:CC:5C:08:F2:48:7B:C9:D9:81:8C:04:94:B4:E0:BC:BA:75:09"
       ]
     }
   }
